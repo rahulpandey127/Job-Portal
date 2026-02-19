@@ -1,5 +1,6 @@
 import { Webhook } from "svix";
 import User from "../models/User.js";
+import "dotenv/config";
 
 //API Controller Function to manage clerk user with database
 export const clerkWebhooks = async (req, res) => {
@@ -9,8 +10,8 @@ export const clerkWebhooks = async (req, res) => {
     //Verifying Headers
     await webhook.verify(JSON.stringify(req.body), {
       "svix-id": req.headers["svix-id"],
-      "svix-signature": req.headers["svix-signature"],
       "svix-timestamp": req.headers["svix-timestamp"],
+      "svix-signature": req.headers["svix-signature"],
     });
 
     //Getting data from request body
@@ -22,7 +23,7 @@ export const clerkWebhooks = async (req, res) => {
         const userData = {
           _id: data.id,
           email: data.email_addresses[0].email_address,
-          name: data.firstName + " " + data.lastName,
+          name: data.first_name + " " + data.last_name,
           image: data.image_url,
           resume: "",
         };
