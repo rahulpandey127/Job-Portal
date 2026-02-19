@@ -15,7 +15,7 @@ const connectDB = async () => {
 mongoose.connection.on('connected',()=>{
     console.log('connected to database')
 });
-await mongoose.connect(`${process.env.MONGO_URI}/job-portal`);
+await mongoose.connect(`${process.env.MONGO_URI}/job-portal-project`);
 }
 
 export default connectDB;
