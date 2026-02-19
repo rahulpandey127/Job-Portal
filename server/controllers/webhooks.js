@@ -1,6 +1,5 @@
 import { Webhook } from "svix";
 import User from "../models/User.js";
-import "dotenv/config";
 
 //API Controller Function to manage clerk user with database
 export const clerkWebhooks = async (req, res) => {
@@ -27,9 +26,11 @@ export const clerkWebhooks = async (req, res) => {
           image: data.image_url,
           resume: "",
         };
-        let savedData = await User.create(userData);
+        // await User.create(userData);
 
-        res.json({ status: "success", data: savedData });
+        let user = new User(userData);
+        await user.save();
+        res.json({});
         break;
       }
       case "user.updated": {
