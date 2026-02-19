@@ -15,7 +15,7 @@ export const clerkWebhooks = async (req, res) => {
 
     //Getting data from request body
     const { data, type } = req.body;
-
+    console.log(data);
     //Switch case for different events
     switch (type) {
       case "user.created": {
@@ -52,6 +52,6 @@ export const clerkWebhooks = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.json({success:false,message:'webhooks error'})
+    res.json({ success: false, message: "webhooks error" });
   }
 };

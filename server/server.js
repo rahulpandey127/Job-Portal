@@ -25,6 +25,7 @@ app.get("/debug-sentry", function mainHandler(req, res) {
 });
 
 app.post("/webhooks", clerkWebhooks);
+app.get("/webhooks", clerkWebhooks);
 
 Sentry.setupExpressErrorHandler(app);
 
