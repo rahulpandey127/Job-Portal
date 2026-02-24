@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Quill from "quill";
 import { assets, JobCategories, JobLocations } from "../assets/assets";
-
+import axios from "axios";
+import { toast } from "react-toastify";
+import { AppContext } from "../context/AppContext";
 const AddJobs = () => {
   let [title, setTitle] = useState("");
   let [location, setLocation] = useState("Bangalore");
@@ -10,6 +12,42 @@ const AddJobs = () => {
   let [salary, setSalary] = useState("0");
   let editorRef = useRef(null);
   let quillRef = useRef(null);
+  const { backendUrl, companyToken } = useContext(AppContext);
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const description = quillRef.current.root.innerHTML;
+
+      let { data } = await axios.post(
+        `${backendUrl}/api/company/post-job`,
+        {
+          title,
+          location,
+          category,
+          level,
+          salary,
+          description,
+        },
+        {
+          headers: {
+            token: companyToken,
+          },
+        },
+      );
+      console.log(data);
+      if (data.success) {
+        toast.success(data.message);
+        setTitle("");
+        setSalary("0");
+        quillRef.current.root.innerHTML = "";
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
     // quillRef.current = new Quill(editorRef.current, {
@@ -34,7 +72,10 @@ const AddJobs = () => {
     }
   }, []);
   return (
-    <form className="container p-4 flex flex-col w-full items-start gap-3">
+    <form
+      className="container p-4 flex flex-col w-full items-start gap-3"
+      onSubmit={onSubmitHandler}
+    >
       <div className="w-full ">
         <p className="mb-2">Job Title</p>
         <input
@@ -102,7 +143,9 @@ const AddJobs = () => {
         />
       </div>
 
-      <button className="w-28 py-3 mt-4 bg-black text-white rounded">ADD</button>
+      <button className="w-28 py-3 mt-4 bg-black text-white rounded">
+        ADD
+      </button>
     </form>
   );
 };

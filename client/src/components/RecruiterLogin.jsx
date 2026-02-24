@@ -1,19 +1,65 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
-
+import axios from "axios";
+import { toast } from "react-toastify";
 const RecruiterLogin = () => {
+  let navigate = useNavigate();
   let [state, setState] = useState("Login");
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
   let [email, setEmail] = useState("");
   const [image, setImage] = useState(false);
   const [isTextDataSubmitted, setIsTextDataSubmitted] = useState(false);
-  const { setShowRecruiterLogin } = useContext(AppContext);
-  const onSubmitHandler = (e) => {
+  const { setShowRecruiterLogin, backendUrl, setCompanyToken, setCompanyData } =
+    useContext(AppContext);
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
     if (state === "Sign Up" && !isTextDataSubmitted) {
-      setIsTextDataSubmitted(true);
+      return setIsTextDataSubmitted(true);
+    }
+    try {
+      if (state === "Login") {
+        //Login API call
+        const { data } = await axios.post(`${backendUrl}/api/company/login`, {
+          email,
+          password,
+        });
+        console.log(data);
+        if (data.success) {
+          setCompanyToken(data.token);
+          setCompanyData(data.company);
+          localStorage.setItem("companyToken", data.token);
+          setShowRecruiterLogin(false);
+          navigate("/dashboard");
+        } else {
+          toast.error(data.message);
+        }
+      } else {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("image", image);
+        const { data } = await axios.post(
+          `${backendUrl}/api/company/register`,
+          formData,
+        );
+        console.log(data);
+        if (data.success) {
+          toast.success(data.message);
+          setCompanyData(data.company);
+          setCompanyToken(data.token);
+          localStorage.setItem("companyToken", data.token);
+          setShowRecruiterLogin(false);
+          navigate("/dashboard");
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -21,7 +67,7 @@ const RecruiterLogin = () => {
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "unset";
-    }
+    };
   }, []);
 
   return (
