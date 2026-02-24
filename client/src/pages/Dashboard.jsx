@@ -9,6 +9,7 @@ const Dashboard = () => {
     useContext(AppContext);
 
   //function to logout from company
+  //all apis
 
   const logout = () => {
     setCompanyData(null);
