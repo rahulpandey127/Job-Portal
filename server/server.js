@@ -28,7 +28,7 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
-  res.send("API Working");
+  res.send("API Working..");
 });
 
 app.get("/debug-sentry", function mainHandler(req, res) {
