@@ -58,7 +58,7 @@ export const loginCompany = async (req, res) => {
   try {
     const comapany = await Company.findOne({ email });
     if (await bcrypt.compare(password, comapany.password)) {
-      res.status(200).json({
+      res.status.json({
         success: true,
         message: "Company logged in successfully",
         company: {
@@ -74,7 +74,7 @@ export const loginCompany = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    res.status.json({ success: false, message: error.message });
   }
 };
 

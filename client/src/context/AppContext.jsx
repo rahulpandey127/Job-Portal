@@ -6,6 +6,7 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
 
 export const AppContextProvider = (props) => {
+  //backend url
   let backendUrl = import.meta.env.VITE_BACKEDN_URL;
   let { user } = useUser();
   let { getToken } = useAuth();

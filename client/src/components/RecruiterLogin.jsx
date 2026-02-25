@@ -15,6 +15,7 @@ const RecruiterLogin = () => {
   const { setShowRecruiterLogin, backendUrl, setCompanyToken, setCompanyData } =
     useContext(AppContext);
   const onSubmitHandler = async (e) => {
+    //Recruiter login
     e.preventDefault();
     if (state === "Sign Up" && !isTextDataSubmitted) {
       return setIsTextDataSubmitted(true);
